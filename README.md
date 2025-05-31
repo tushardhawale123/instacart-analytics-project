@@ -22,7 +22,7 @@ This end-to-end data engineering and analytics project analyzes Instacart online
 **Due to GitHub's file size limitations, the raw data files (exceeding 100MB) could not be uploaded to this repository.**
 
 To reproduce this analysis, please download the "Instacart Market Basket Analysis" dataset from Kaggle:
-[https://www.kaggle.com/competitions/instacart-market-basket-analysis/data](https://www.kaggle.com/competitions/instacart-market-basket-analysis/data)
+[https://www.kaggle.com/datasets/yasserh/instacart-online-grocery-basket-analysis-dataset?resource=download](https://www.kaggle.com/datasets/yasserh/instacart-online-grocery-basket-analysis-dataset)
 
 Place the downloaded CSV files in the `1_data/raw/` directory before running any scripts.
 
