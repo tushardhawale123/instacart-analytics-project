@@ -1,0 +1,175 @@
+{
+    "name": "InstacartDataPipeline",
+    "properties": {
+        "description": "End-to-end data pipeline for Instacart Analytics Project",
+        "activities": [
+            {
+                "name": "LoadDataToDataLake",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "BinarySource",
+                        "storeSettings": {
+                            "type": "FileServerReadSettings",
+                            "recursive": true,
+                            "wildcardFileName": "*.csv"
+                        }
+                    },
+                    "sink": {
+                        "type": "BinarySink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings"
+                        }
+                    },
+                    "enableStaging": false
+                },
+                "inputs": [
+                    {
+                        "referenceName": "ProcessedLocalDataset",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "ADLSProcessedDataset",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "ExecuteDatabricksNotebook",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "LoadDataToDataLake",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Instacart/data_ingestion",
+                    "baseParameters": {
+                        "source_container": "instacartdata",
+                        "source_path": "processed"
+                    },
+                    "libraries": [
+                        {
+                            "pypi": {
+                                "package": "scikit-learn"
+                            }
+                        },
+                        {
+                            "pypi": {
+                                "package": "matplotlib"
+                            }
+                        }
+                    ]
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "ExecuteAnalyticsNotebook",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "ExecuteDatabricksNotebook",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "notebookPath": "/Instacart/advanced_analytics_delta_approach",
+                    "baseParameters": {},
+                    "libraries": [
+                        {
+                            "pypi": {
+                                "package": "scikit-learn"
+                            }
+                        },
+                        {
+                            "pypi": {
+                                "package": "matplotlib"
+                            }
+                        }
+                    ]
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureDatabricks",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "SendNotificationEmail",
+                "type": "WebActivity",
+                "dependsOn": [
+                    {
+                        "activity": "ExecuteAnalyticsNotebook",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "url": "https://prod-00.eastus.logic.azure.com:443/workflows/your-logic-app-url-here",
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": {
+                        "value": "{\n    \"subject\": \"Instacart Analytics Pipeline Completed\",\n    \"message\": \"The data pipeline has successfully completed. Data is ready for Power BI analysis.\",\n    \"to\": \"youremail@domain.com\"\n}",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "windowStart": {
+                "type": "string"
+            },
+            "windowEnd": {
+                "type": "string"
+            }
+        },
+        "annotations": [],
+        "lastPublishTime": "2025-05-30T11:39:25Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

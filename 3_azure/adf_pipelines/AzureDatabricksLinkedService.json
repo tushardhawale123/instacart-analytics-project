@@ -1,0 +1,16 @@
+{
+    "name": "AzureDatabricks",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "annotations": [],
+        "type": "AzureDatabricks",
+        "typeProperties": {
+            "domain": "https://adb-xyz.azuredatabricks.net",
+            "accessToken": {
+                "type": "SecureString",
+                "value": "**********"
+            },
+            "existingClusterId": "0123-456789-abcdefgh"
+        }
+    }
+}
