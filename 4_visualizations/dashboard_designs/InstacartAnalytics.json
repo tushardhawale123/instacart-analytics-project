@@ -1,0 +1,61 @@
+{
+    "name": "InstacartAnalytics",
+    "dataColors": [
+        "#FF8C00",  
+        "#43B02A",  
+        "#1E7BE2",  
+        "#7030A0",  
+        "#D64550",  
+        "#2D5F8A",  
+        "#53A8B6",  
+        "#FFB347",  
+        "#A5D867",  
+        "#7986CB"   
+    ],
+    "foreground": "#252525",
+    "foregroundNeutralSecondary": "#605E5C",
+    "foregroundNeutralTertiary": "#B3B0AD",
+    "background": "#FFFFFF",
+    "backgroundLight": "#F5F5F5",
+    "backgroundNeutral": "#F0F0F0",
+    "tableAccent": "#FF8C00",
+    "good": "#43B02A",
+    "neutral": "#858585",
+    "bad": "#D64550",
+    "maximum": "#1E7BE2",
+    "minimum": "#FFB347",
+    "null": "#BDBDBD",
+    "hyperlink": "#1E7BE2",
+    "visualStyles": {
+        "*": {
+            "*": {
+                "background": [{ "color": {"solid": {"color": "#FFFFFF"}} }],
+                "border": [{ "color": {"solid": {"color": "#E0E0E0"}} }],
+                "title": [{ 
+                    "fontFamily": "Segoe UI Semibold",
+                    "fontSize": 14,
+                    "color": {"solid": {"color": "#252525"}}
+                }],
+                "label": [{ 
+                    "fontFamily": "Segoe UI",
+                    "fontSize": 10,
+                    "color": {"solid": {"color": "#605E5C"}}
+                }]
+            }
+        },
+        "card": {
+            "*": {
+                "categoryLabel": [{ 
+                    "fontFamily": "Segoe UI", 
+                    "fontSize": 12,
+                    "color": {"solid": {"color": "#605E5C"}}
+                }],
+                "value": [{ 
+                    "fontFamily": "Segoe UI Semibold", 
+                    "fontSize": 24,
+                    "color": {"solid": {"color": "#252525"}}
+                }]
+            }
+        }
+    }
+}
